@@ -57,6 +57,6 @@ func (l *LoginLogic) Login(req *types.LoginRequest) (resp *types.LoginResponse, 
 		}
 		return resp, nil
 	} else {
-		return nil, xcode.Errorf(xcode.ParameterError, "用户名或密码错误")
+		return nil, xcode.New(xcode.ParameterError, "用户名或密码错误")
 	}
 }

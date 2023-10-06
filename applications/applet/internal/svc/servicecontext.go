@@ -3,6 +3,7 @@ package svc
 import (
 	"github.com/sybapp/infoflow/applications/applet/internal/config"
 	"github.com/sybapp/infoflow/applications/user/rpc/user"
+	"github.com/sybapp/infoflow/pkg/interceptors"
 	"github.com/zeromicro/go-zero/core/stores/redis"
 	"github.com/zeromicro/go-zero/zrpc"
 )
@@ -14,16 +15,13 @@ type ServiceContext struct {
 }
 
 func NewServiceContext(c config.Config) (*ServiceContext, error) {
-	userCli, err := zrpc.NewClient(c.UserRPC)
-	if err != nil {
-		return nil, err
-	}
-	u := user.NewUser(userCli)
+	userCli := zrpc.MustNewClient(
+		c.UserRPC,
+		zrpc.WithUnaryClientInterceptor(interceptors.ClientErrorInterceptor()),
+	)
 
-	r, err := redis.NewRedis(c.BizRedis)
-	if err != nil {
-		return nil, err
-	}
+	u := user.NewUser(userCli)
+	r := redis.MustNewRedis(c.BizRedis)
 
 	return &ServiceContext{
 		Config:   c,

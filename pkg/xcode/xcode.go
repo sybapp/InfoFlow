@@ -8,7 +8,7 @@ type XCode interface {
 	Error() string
 	Code() int
 	Message() string
-	Details() []any
+	Details() []interface{}
 }
 
 type Code struct {
@@ -32,7 +32,7 @@ func (c Code) Message() string {
 	return c.Error()
 }
 
-func (c Code) Details() []any {
+func (c Code) Details() []interface{} {
 	return nil
 }
 
@@ -48,11 +48,7 @@ func String(s string) Code {
 	return Code{code: code}
 }
 
-func Errorf(code int, msg string) Code {
-	return Code{code: code, msg: msg}
-}
-
-func Infof(code int, msg string) Code {
+func New(code int, msg string) Code {
 	return Code{code: code, msg: msg}
 }
 

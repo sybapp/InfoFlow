@@ -7,9 +7,11 @@ import (
 	"github.com/sybapp/infoflow/applications/applet/internal/config"
 	"github.com/sybapp/infoflow/applications/applet/internal/handler"
 	"github.com/sybapp/infoflow/applications/applet/internal/svc"
+	"github.com/sybapp/infoflow/pkg/xcode"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"
+	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
 var configFile = flag.String("f", "etc/applet-api.yaml", "the config file")
@@ -28,6 +30,8 @@ func main() {
 		panic(err)
 	}
 	handler.RegisterHandlers(server, ctx)
+
+	httpx.SetErrorHandler(xcode.ErrHandler)
 
 	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
 	server.Start()

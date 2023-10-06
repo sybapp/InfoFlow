@@ -36,24 +36,24 @@ func (l *LoginLogic) Login(in *service.LoginRequest) (*service.LoginResponse, er
 		return l.loginByPhone(in)
 	}
 
-	return nil, xcode.Errorf(xcode.ParameterError, "用户名或手机号不能为空")
+	return nil, xcode.New(xcode.ParameterError, "用户名或手机号不能为空")
 }
 
 func (l *LoginLogic) loginByUsername(in *service.LoginRequest) (*service.LoginResponse, error) {
 	user, err := l.svcCtx.UserModel.FindByUsername(l.ctx, in.Username)
 	if err != nil {
 		logx.Errorf("Login req: %v error: %v", in, err)
-		return nil, xcode.Errorf(xcode.DatabaseError, "登录失败")
+		return nil, xcode.New(xcode.DatabaseError, "登录失败")
 	}
 
 	if user == nil {
 		logx.Errorf("Login req: %v error: %v", in, "用户不存在")
-		return nil, xcode.Errorf(xcode.ParameterError, "用户不存在")
+		return nil, xcode.New(xcode.ParameterError, "用户不存在")
 	}
 
 	if user.Password != encrypt.EncPassword(in.Password) {
 		logx.Errorf("Login req: %v error: %v", in, "密码错误")
-		return nil, xcode.Errorf(xcode.ParameterError, "密码错误")
+		return nil, xcode.New(xcode.ParameterError, "密码错误")
 	}
 
 	return &service.LoginResponse{
@@ -65,17 +65,17 @@ func (l *LoginLogic) loginByPhone(in *service.LoginRequest) (*service.LoginRespo
 	user, err := l.svcCtx.UserModel.FindByPhone(l.ctx, in.Phone)
 	if err != nil {
 		logx.Errorf("Login req: %v error: %v", in, err)
-		return nil, xcode.Errorf(xcode.DatabaseError, "登录失败")
+		return nil, xcode.New(xcode.DatabaseError, "登录失败")
 	}
 
 	if user == nil {
 		logx.Errorf("Login req: %v error: %v", in, "用户不存在")
-		return nil, xcode.Errorf(xcode.ParameterError, "用户不存在")
+		return nil, xcode.New(xcode.ParameterError, "用户不存在")
 	}
 
 	if user.Password != encrypt.EncPassword(in.Password) {
 		logx.Errorf("Login req: %v error: %v", in, "密码错误")
-		return nil, xcode.Errorf(xcode.ParameterError, "密码错误")
+		return nil, xcode.New(xcode.ParameterError, "密码错误")
 	}
 
 	return &service.LoginResponse{
