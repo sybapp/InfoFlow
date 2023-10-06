@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package service;
+option go_package = "./service";
+
+service User {
+  rpc Register(RegisterRequest) returns (RegisterResponse);
+  rpc Login(LoginRequest) returns (LoginResponse);
+  rpc FindById(FindByIdRequest) returns (FindByIdResponse);
+  rpc FindByPhone(FindByPhoneRequest) returns (FindByPhoneResponse);
+  rpc FindByUsername(FindByUsernameRequest) returns (FindByUsernameResponse);
+}
+
+message RegisterRequest {
+  string username = 1;
+  string phone = 2;
+  string avatar = 3;
+  string password = 4;
+}
+
+message RegisterResponse { int64 userId = 1; }
+
+message LoginRequest {
+  string username = 1;
+  string password = 2;
+  string phone = 3;
+}
+
+message LoginResponse { int64 userId = 1; }
+
+message FindByIdRequest { int64 userId = 1; }
+
+message FindByIdResponse {
+  int64 userId = 1;
+  string username = 2;
+  string phone = 3;
+  string avatar = 4;
+}
+
+message FindByPhoneRequest { string phone = 1; }
+
+message FindByPhoneResponse {
+  int64 userId = 1;
+  string username = 2;
+  string phone = 3;
+  string avatar = 4;
+}
+
+message FindByUsernameRequest { string username = 1; }
+
+message FindByUsernameResponse {
+  int64 userId = 1;
+  string username = 2;
+  string phone = 3;
+  string avatar = 4;
+}
+
