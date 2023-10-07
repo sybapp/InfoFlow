@@ -1,7 +1,7 @@
 # InfoFlow
 ## Introduction
 The project is a web application for information flow. 
-It is a frok of [beyond](https://github.com/zhoushuguang/beyond/).
+It is a fork of [beyond](https://github.com/zhoushuguang/beyond/).
 The main functions are as follows:
 1. User can register and login.
 
