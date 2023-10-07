@@ -6,7 +6,7 @@ import (
 
 	"github.com/sybapp/infoflow/applications/user/rpc/internal/model"
 	"github.com/sybapp/infoflow/applications/user/rpc/internal/svc"
-	"github.com/sybapp/infoflow/applications/user/rpc/service"
+	"github.com/sybapp/infoflow/applications/user/rpc/pb"
 	"github.com/sybapp/infoflow/pkg/xcode"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -26,7 +26,7 @@ func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Register
 	}
 }
 
-func (l *RegisterLogic) Register(in *service.RegisterRequest) (*service.RegisterResponse, error) {
+func (l *RegisterLogic) Register(in *pb.RegisterRequest) (*pb.RegisterResponse, error) {
 	err := l.checkUserExist(in.Username, in.Phone)
 	if err != nil {
 		return nil, err
@@ -51,7 +51,7 @@ func (l *RegisterLogic) Register(in *service.RegisterRequest) (*service.Register
 		return nil, xcode.New(xcode.DatabaseError, "注册失败")
 	}
 
-	return &service.RegisterResponse{UserId: userId}, nil
+	return &pb.RegisterResponse{UserId: userId}, nil
 }
 
 func (l *RegisterLogic) checkUserExist(username, phone string) error {

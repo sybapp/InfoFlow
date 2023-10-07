@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/sybapp/infoflow/applications/user/rpc/internal/svc"
-	"github.com/sybapp/infoflow/applications/user/rpc/service"
+	"github.com/sybapp/infoflow/applications/user/rpc/pb"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -23,13 +23,13 @@ func NewFindByPhoneLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FindB
 	}
 }
 
-func (l *FindByPhoneLogic) FindByPhone(in *service.FindByPhoneRequest) (*service.FindByPhoneResponse, error) {
+func (l *FindByPhoneLogic) FindByPhone(in *pb.FindByPhoneRequest) (*pb.FindByPhoneResponse, error) {
 	user, err := l.svcCtx.UserModel.FindByPhone(l.ctx, in.Phone)
 	if err != nil {
 		return nil, err
 	}
 
-	return &service.FindByPhoneResponse{
+	return &pb.FindByPhoneResponse{
 		UserId:   user.Id,
 		Username: user.Username,
 		Phone:    user.Phone,

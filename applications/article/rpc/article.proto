@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 package pb;
-option go_package="./pb";
+option go_package = "./pb";
 
 service Article {
   rpc Publish(PublishRequest) returns (PublishResponse);
@@ -18,9 +18,7 @@ message PublishRequest {
   string cover = 5;
 }
 
-message PublishResponse {
-  int64 articleId = 1;
-}
+message PublishResponse { int64 articleId = 1; }
 
 message ArticlesRequest {
   int64 userId = 1;
@@ -53,13 +51,8 @@ message ArticleDeleteRequest {
   int64 articleId = 2;
 }
 
-message ArticleDeleteResponse {
-}
+message ArticleDeleteResponse {}
 
-message ArticleDetailRequest {
-  int64 articleId = 1;
-}
+message ArticleDetailRequest { int64 articleId = 1; }
 
-message ArticleDetailResponse {
-  ArticleItem article = 1;
-}
+message ArticleDetailResponse { ArticleItem article = 1; }

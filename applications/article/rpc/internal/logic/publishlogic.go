@@ -26,7 +26,7 @@ func NewPublishLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PublishLo
 }
 
 func (l *PublishLogic) Publish(in *pb.PublishRequest) (*pb.PublishResponse, error) {
-	ret, err := l.svcCtx.AritcleModel.Insert(l.ctx, &model.Article{
+	ret, err := l.svcCtx.ArticleModel.Insert(l.ctx, &model.Article{
 		AuthorId:    in.UserId,
 		Title:       in.Title,
 		Content:     in.Content,

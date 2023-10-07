@@ -6,23 +6,23 @@ package user
 import (
 	"context"
 
-	"github.com/sybapp/infoflow/applications/user/rpc/service"
+	"github.com/sybapp/infoflow/applications/user/rpc/pb"
 
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"
 )
 
 type (
-	FindByIdRequest        = service.FindByIdRequest
-	FindByIdResponse       = service.FindByIdResponse
-	FindByPhoneRequest     = service.FindByPhoneRequest
-	FindByPhoneResponse    = service.FindByPhoneResponse
-	FindByUsernameRequest  = service.FindByUsernameRequest
-	FindByUsernameResponse = service.FindByUsernameResponse
-	LoginRequest           = service.LoginRequest
-	LoginResponse          = service.LoginResponse
-	RegisterRequest        = service.RegisterRequest
-	RegisterResponse       = service.RegisterResponse
+	FindByIdRequest        = pb.FindByIdRequest
+	FindByIdResponse       = pb.FindByIdResponse
+	FindByPhoneRequest     = pb.FindByPhoneRequest
+	FindByPhoneResponse    = pb.FindByPhoneResponse
+	FindByUsernameRequest  = pb.FindByUsernameRequest
+	FindByUsernameResponse = pb.FindByUsernameResponse
+	LoginRequest           = pb.LoginRequest
+	LoginResponse          = pb.LoginResponse
+	RegisterRequest        = pb.RegisterRequest
+	RegisterResponse       = pb.RegisterResponse
 
 	User interface {
 		Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error)
@@ -44,26 +44,26 @@ func NewUser(cli zrpc.Client) User {
 }
 
 func (m *defaultUser) Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error) {
-	client := service.NewUserClient(m.cli.Conn())
+	client := pb.NewUserClient(m.cli.Conn())
 	return client.Register(ctx, in, opts...)
 }
 
 func (m *defaultUser) Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error) {
-	client := service.NewUserClient(m.cli.Conn())
+	client := pb.NewUserClient(m.cli.Conn())
 	return client.Login(ctx, in, opts...)
 }
 
 func (m *defaultUser) FindById(ctx context.Context, in *FindByIdRequest, opts ...grpc.CallOption) (*FindByIdResponse, error) {
-	client := service.NewUserClient(m.cli.Conn())
+	client := pb.NewUserClient(m.cli.Conn())
 	return client.FindById(ctx, in, opts...)
 }
 
 func (m *defaultUser) FindByPhone(ctx context.Context, in *FindByPhoneRequest, opts ...grpc.CallOption) (*FindByPhoneResponse, error) {
-	client := service.NewUserClient(m.cli.Conn())
+	client := pb.NewUserClient(m.cli.Conn())
 	return client.FindByPhone(ctx, in, opts...)
 }
 
 func (m *defaultUser) FindByUsername(ctx context.Context, in *FindByUsernameRequest, opts ...grpc.CallOption) (*FindByUsernameResponse, error) {
-	client := service.NewUserClient(m.cli.Conn())
+	client := pb.NewUserClient(m.cli.Conn())
 	return client.FindByUsername(ctx, in, opts...)
 }

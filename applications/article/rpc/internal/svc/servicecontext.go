@@ -11,18 +11,18 @@ import (
 
 type ServiceContext struct {
 	Config            config.Config
-	AritcleModel      model.ArticleModel
+	ArticleModel      model.ArticleModel
 	BizRedis          *redis.Redis
 	SingleFlightGroup singleflight.Group
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
-	aritcleModel := model.NewArticleModel(sqlx.NewMysql(c.DataSource))
+	aritcleModel := model.NewArticleModel(sqlx.NewMysql(c.DataSource), c.CacheRedis)
 	redis := redis.MustNewRedis(c.BizRedis)
 
 	return &ServiceContext{
 		Config:       c,
-		AritcleModel: aritcleModel,
+		ArticleModel: aritcleModel,
 		BizRedis:     redis,
 	}
 }

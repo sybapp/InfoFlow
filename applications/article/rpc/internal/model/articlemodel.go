@@ -1,6 +1,13 @@
 package model
 
-import "github.com/zeromicro/go-zero/core/stores/sqlx"
+import (
+	"context"
+	"database/sql"
+	"fmt"
+
+	"github.com/zeromicro/go-zero/core/stores/cache"
+	"github.com/zeromicro/go-zero/core/stores/sqlx"
+)
 
 var _ ArticleModel = (*customArticleModel)(nil)
 
@@ -9,6 +16,8 @@ type (
 	// and implement the added methods in customArticleModel.
 	ArticleModel interface {
 		articleModel
+		FindArticlesByUserId(ctx context.Context, userId, likeNum int64, pubTime, sortField string, limit int) ([]*Article, error)
+		UpdateArticleStatus(ctx context.Context, id int64, status int) error
 	}
 
 	customArticleModel struct {
@@ -16,9 +25,43 @@ type (
 	}
 )
 
+// FindArticlesByUserId implements ArticleModel.
+func (m *customArticleModel) FindArticlesByUserId(ctx context.Context, userId int64, likeNum int64, pubTime string, sortField string, limit int) ([]*Article, error) {
+	var (
+		err      error
+		sql      string
+		anyField any
+		articles []*Article
+	)
+	if sortField == "like_num" {
+		anyField = likeNum
+		sql = fmt.Sprintf("select "+articleRows+" from "+m.table+" where author_id=? and like_num < ? order by %s desc limit ?", sortField)
+	} else {
+		anyField = pubTime
+		sql = fmt.Sprintf("select "+articleRows+" from "+m.table+" where author_id=? and publish_time < ? order by %s desc limit ?", sortField)
+	}
+	err = m.QueryRowsNoCacheCtx(ctx, &articles, sql, userId, anyField, limit)
+	if err != nil {
+		return nil, err
+	}
+
+	return articles, nil
+}
+
+// UpdateArticleStatus implements ArticleModel.
+func (m *customArticleModel) UpdateArticleStatus(ctx context.Context, id int64, status int) error {
+	infoflowArticleArticleIdKey := fmt.Sprintf("%s%v", cacheInfoflowArticleArticleIdPrefix, id)
+	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (sql.Result, error) {
+		query := fmt.Sprintf("update %s set status = ? where `id` = ?", m.table)
+		return conn.ExecCtx(ctx, query, status, id)
+	}, infoflowArticleArticleIdKey)
+
+	return err
+}
+
 // NewArticleModel returns a model for the database table.
-func NewArticleModel(conn sqlx.SqlConn) ArticleModel {
+func NewArticleModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) ArticleModel {
 	return &customArticleModel{
-		defaultArticleModel: newArticleModel(conn),
+		defaultArticleModel: newArticleModel(conn, c, opts...),
 	}
 }

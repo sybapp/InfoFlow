@@ -7,7 +7,7 @@ import (
 	"github.com/sybapp/infoflow/applications/user/rpc/internal/config"
 	"github.com/sybapp/infoflow/applications/user/rpc/internal/server"
 	"github.com/sybapp/infoflow/applications/user/rpc/internal/svc"
-	"github.com/sybapp/infoflow/applications/user/rpc/service"
+	"github.com/sybapp/infoflow/applications/user/rpc/pb"
 	"github.com/sybapp/infoflow/pkg/interceptors"
 
 	"github.com/zeromicro/go-zero/core/conf"
@@ -27,7 +27,7 @@ func main() {
 	ctx := svc.NewServiceContext(c)
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
-		service.RegisterUserServer(grpcServer, server.NewUserServer(ctx))
+		pb.RegisterUserServer(grpcServer, server.NewUserServer(ctx))
 
 		if c.Mode == cs.DevMode || c.Mode == cs.TestMode {
 			reflection.Register(grpcServer)

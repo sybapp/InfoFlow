@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/sybapp/infoflow/applications/user/rpc/internal/svc"
-	"github.com/sybapp/infoflow/applications/user/rpc/service"
+	"github.com/sybapp/infoflow/applications/user/rpc/pb"
 	"github.com/sybapp/infoflow/pkg/encrypt"
 	"github.com/sybapp/infoflow/pkg/xcode"
 
@@ -26,7 +26,7 @@ func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LoginLogic 
 	}
 }
 
-func (l *LoginLogic) Login(in *service.LoginRequest) (*service.LoginResponse, error) {
+func (l *LoginLogic) Login(in *pb.LoginRequest) (*pb.LoginResponse, error) {
 	in.Username = strings.TrimSpace(in.Username)
 	in.Phone = strings.TrimSpace(in.Phone)
 
@@ -39,7 +39,7 @@ func (l *LoginLogic) Login(in *service.LoginRequest) (*service.LoginResponse, er
 	return nil, xcode.New(xcode.ParameterError, "用户名或手机号不能为空")
 }
 
-func (l *LoginLogic) loginByUsername(in *service.LoginRequest) (*service.LoginResponse, error) {
+func (l *LoginLogic) loginByUsername(in *pb.LoginRequest) (*pb.LoginResponse, error) {
 	user, err := l.svcCtx.UserModel.FindByUsername(l.ctx, in.Username)
 	if err != nil {
 		logx.Errorf("Login req: %v error: %v", in, err)
@@ -56,12 +56,12 @@ func (l *LoginLogic) loginByUsername(in *service.LoginRequest) (*service.LoginRe
 		return nil, xcode.New(xcode.ParameterError, "密码错误")
 	}
 
-	return &service.LoginResponse{
+	return &pb.LoginResponse{
 		UserId: user.Id,
 	}, nil
 }
 
-func (l *LoginLogic) loginByPhone(in *service.LoginRequest) (*service.LoginResponse, error) {
+func (l *LoginLogic) loginByPhone(in *pb.LoginRequest) (*pb.LoginResponse, error) {
 	user, err := l.svcCtx.UserModel.FindByPhone(l.ctx, in.Phone)
 	if err != nil {
 		logx.Errorf("Login req: %v error: %v", in, err)
@@ -78,7 +78,7 @@ func (l *LoginLogic) loginByPhone(in *service.LoginRequest) (*service.LoginRespo
 		return nil, xcode.New(xcode.ParameterError, "密码错误")
 	}
 
-	return &service.LoginResponse{
+	return &pb.LoginResponse{
 		UserId: user.Id,
 	}, nil
 }

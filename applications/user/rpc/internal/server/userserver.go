@@ -8,12 +8,12 @@ import (
 
 	"github.com/sybapp/infoflow/applications/user/rpc/internal/logic"
 	"github.com/sybapp/infoflow/applications/user/rpc/internal/svc"
-	"github.com/sybapp/infoflow/applications/user/rpc/service"
+	"github.com/sybapp/infoflow/applications/user/rpc/pb"
 )
 
 type UserServer struct {
 	svcCtx *svc.ServiceContext
-	service.UnimplementedUserServer
+	pb.UnimplementedUserServer
 }
 
 func NewUserServer(svcCtx *svc.ServiceContext) *UserServer {
@@ -22,27 +22,27 @@ func NewUserServer(svcCtx *svc.ServiceContext) *UserServer {
 	}
 }
 
-func (s *UserServer) Register(ctx context.Context, in *service.RegisterRequest) (*service.RegisterResponse, error) {
+func (s *UserServer) Register(ctx context.Context, in *pb.RegisterRequest) (*pb.RegisterResponse, error) {
 	l := logic.NewRegisterLogic(ctx, s.svcCtx)
 	return l.Register(in)
 }
 
-func (s *UserServer) Login(ctx context.Context, in *service.LoginRequest) (*service.LoginResponse, error) {
+func (s *UserServer) Login(ctx context.Context, in *pb.LoginRequest) (*pb.LoginResponse, error) {
 	l := logic.NewLoginLogic(ctx, s.svcCtx)
 	return l.Login(in)
 }
 
-func (s *UserServer) FindById(ctx context.Context, in *service.FindByIdRequest) (*service.FindByIdResponse, error) {
+func (s *UserServer) FindById(ctx context.Context, in *pb.FindByIdRequest) (*pb.FindByIdResponse, error) {
 	l := logic.NewFindByIdLogic(ctx, s.svcCtx)
 	return l.FindById(in)
 }
 
-func (s *UserServer) FindByPhone(ctx context.Context, in *service.FindByPhoneRequest) (*service.FindByPhoneResponse, error) {
+func (s *UserServer) FindByPhone(ctx context.Context, in *pb.FindByPhoneRequest) (*pb.FindByPhoneResponse, error) {
 	l := logic.NewFindByPhoneLogic(ctx, s.svcCtx)
 	return l.FindByPhone(in)
 }
 
-func (s *UserServer) FindByUsername(ctx context.Context, in *service.FindByUsernameRequest) (*service.FindByUsernameResponse, error) {
+func (s *UserServer) FindByUsername(ctx context.Context, in *pb.FindByUsernameRequest) (*pb.FindByUsernameResponse, error) {
 	l := logic.NewFindByUsernameLogic(ctx, s.svcCtx)
 	return l.FindByUsername(in)
 }

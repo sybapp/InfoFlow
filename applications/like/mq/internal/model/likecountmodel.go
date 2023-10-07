@@ -1,6 +1,9 @@
 package model
 
-import "github.com/zeromicro/go-zero/core/stores/sqlx"
+import (
+	"github.com/zeromicro/go-zero/core/stores/cache"
+	"github.com/zeromicro/go-zero/core/stores/sqlx"
+)
 
 var _ LikeCountModel = (*customLikeCountModel)(nil)
 
@@ -17,8 +20,8 @@ type (
 )
 
 // NewLikeCountModel returns a model for the database table.
-func NewLikeCountModel(conn sqlx.SqlConn) LikeCountModel {
+func NewLikeCountModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) LikeCountModel {
 	return &customLikeCountModel{
-		defaultLikeCountModel: newLikeCountModel(conn),
+		defaultLikeCountModel: newLikeCountModel(conn, c, opts...),
 	}
 }
