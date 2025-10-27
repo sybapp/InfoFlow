@@ -12,7 +12,9 @@ CREATE TABLE
         `username` varchar(32) NOT NULL DEFAULT '' COMMENT '用户名',
         `avatar` varchar(256) NOT NULL DEFAULT '' COMMENT '头像',
         `phone` varchar(128) NOT NULL DEFAULT '' COMMENT '手机号',
-        `password` varchar(128) NOT NULL DEFAULT '' COMMENT '密码',
+        `password` varchar(256) NOT NULL DEFAULT '' COMMENT '密码',
         PRIMARY KEY (`id`),
-        KEY `ix_mtime` (`mtime`)
+        KEY `ix_mtime` (`mtime`),
+        KEY `ix_username` (`username`),
+        KEY `ix_phone` (`phone`)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '用户表';

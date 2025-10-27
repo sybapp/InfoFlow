@@ -6,6 +6,7 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/pkg/errors v0.9.1
 	github.com/zeromicro/go-zero v1.5.6
+	golang.org/x/crypto v0.13.0
 	google.golang.org/grpc v1.58.2
 	google.golang.org/protobuf v1.31.0
 )
